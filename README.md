@@ -36,7 +36,7 @@ npm install
 npm run build
 
 # Run simulation demo
-cd packages/n8n-extension-telemetry
+cd packages/n8n-observability-sdk
 npx ts-node src/simulation.ts
 
 # View events
@@ -221,7 +221,7 @@ Simple Notification
 ## File Structure
 
 ```
-n8n-telemetry-sdk/
+n8n-observability-sdk/
 ├── packages/
 │   ├── telemetry-core/
 │   │   └── src/
