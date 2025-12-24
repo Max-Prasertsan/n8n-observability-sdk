@@ -1,0 +1,81 @@
+{
+  "name": "Telemetry Demo Workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "sessionId": "",
+        "tags": "demo, telemetry, test",
+        "owner": "demo-user",
+        "environment": "development",
+        "transport": "file",
+        "filePath": "./data/events.jsonl",
+        "redactPayloads": true,
+        "enableEvaluation": true
+      },
+      "id": "telemetry-config",
+      "name": "Telemetry Config",
+      "type": "n8n-nodes-telemetry.telemetryConfig",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://jsonplaceholder.typicode.com/posts/1"
+      },
+      "id": "http-request",
+      "name": "Fetch Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "eventType": "checkpoint",
+        "eventName": "data_fetched",
+        "useConfigFromInput": true
+      },
+      "id": "checkpoint-1",
+      "name": "Checkpoint: Data Fetched",
+      "type": "n8n-nodes-telemetry.telemetryEmit",
+      "typeVersion": 1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.all();\nreturn input.map(item => ({ json: { ...item.json, processed: true } }));"
+      },
+      "id": "code-transform",
+      "name": "Transform Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "values": { "string": [{ "name": "result", "value": "success" }] }
+      },
+      "id": "set-result",
+      "name": "Set Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [1340, 300]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": { "main": [[{ "node": "Telemetry Config", "type": "main", "index": 0 }]] },
+    "Telemetry Config": { "main": [[{ "node": "Fetch Data", "type": "main", "index": 0 }]] },
+    "Fetch Data": { "main": [[{ "node": "Checkpoint: Data Fetched", "type": "main", "index": 0 }]] },
+    "Checkpoint: Data Fetched": { "main": [[{ "node": "Transform Data", "type": "main", "index": 0 }]] },
+    "Transform Data": { "main": [[{ "node": "Set Result", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}
