@@ -1,0 +1,22 @@
+{
+  "name": "@n8n-telemetry/core",
+  "version": "1.0.0",
+  "description": "Core telemetry event schema, transport, and evaluator",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/uuid": "^9.0.0",
+    "typescript": "^5.3.0"
+  },
+  "files": [
+    "dist"
+  ]
+}
